@@ -1,0 +1,82 @@
+
+public class TestKRS {
+    public static void main(String[] args) {
+        System.out.println("╔════════════════════════════════════════════╗");
+        System.out.println("║         TEST PROGRAM APLIKASI KRS          ║");
+        System.out.println("╚════════════════════════════════════════════╝\n");
+
+        System.out.println("═══ TEST CASE 1: Mahasiswa mengambil 3 MK ═══\n");
+        testCase1();
+
+      
+        System.out.println("\n═══ TEST CASE 2: Mahasiswa mencapai batas maksimal ═══\n");
+        testCase2();
+
+        
+        System.out.println("\n═══ TEST CASE 3: Mahasiswa tanpa MK ═══\n");
+        testCase3();
+
+        System.out.println("\n✓ Semua test case selesai!");
+    }
+
+  
+     
+    private static void testCase1() {
+        Mahasiswa mhs = new Mahasiswa("123456", "Budi Santoso");
+
+        MataKuliah mk1 = new MataKuliah("IF101", "Pemrograman Dasar", 3);
+        MataKuliah mk2 = new MataKuliah("IF102", "Struktur Data", 4);
+        MataKuliah mk3 = new MataKuliah("IF103", "Basis Data", 3);
+
+        System.out.println("Menambahkan mata kuliah...");
+        System.out.println("1. " + (mhs.tambahMk(mk1) ? "✓" : "✗") + " " + mk1.toString());
+        System.out.println("2. " + (mhs.tambahMk(mk2) ? "✓" : "✗") + " " + mk2.toString());
+        System.out.println("3. " + (mhs.tambahMk(mk3) ? "✓" : "✗") + " " + mk3.toString());
+        System.out.println("\nTotal SKS: " + mhs.getTotalSks() + " / 24");
+        System.out.println("Sisa SKS: " + mhs.getSisaSks());
+
+        mhs.printKRS();
+    }
+
+    
+    private static void testCase2() {
+        Mahasiswa mhs = new Mahasiswa("654321", "Siti Nur Azizah");
+
+       
+        MataKuliah[] courses = {
+            new MataKuliah("IF201", "Algoritma", 4),
+            new MataKuliah("IF202", "OOP", 4),
+            new MataKuliah("IF203", "Web Programming", 3),
+            new MataKuliah("IF204", "Database Design", 3),
+            new MataKuliah("IF205", "Network", 3),
+            new MataKuliah("IF206", "Security", 4)
+        };
+
+        System.out.println("Menambahkan mata kuliah sampai 24 SKS...");
+        int count = 1;
+        for (MataKuliah mk : courses) {
+            if (mhs.tambahMk(mk)) {
+                System.out.printf("%d. ✓ %s (Total: %d SKS)\n", count++, mk.toString(), mhs.getTotalSks());
+                if (mhs.getSisaSks() == 0) break;
+            } else {
+                System.out.printf("%d. ✗ %s (Sisa SKS tidak cukup)\n", count++, mk.toString());
+            }
+        }
+
+        System.out.println("\nTotal SKS: " + mhs.getTotalSks() + " / 24");
+        System.out.println("Sisa SKS: " + mhs.getSisaSks());
+
+        mhs.printKRS();
+    }
+
+    
+    private static void testCase3() {
+        Mahasiswa mhs = new Mahasiswa("789012", "Ahmad Rizki");
+
+        System.out.println("Mahasiswa tidak mengambil mata kuliah apapun.");
+        System.out.println("\nTotal SKS: " + mhs.getTotalSks() + " / 24");
+        System.out.println("Sisa SKS: " + mhs.getSisaSks());
+
+        mhs.printKRS();
+    }
+}
