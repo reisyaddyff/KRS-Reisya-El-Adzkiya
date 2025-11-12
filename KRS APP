@@ -1,0 +1,151 @@
+import java.util.Scanner;
+
+
+public class KRSApp {
+
+    private static Scanner scanner;
+
+    public static void main(String[] args) {
+        scanner = new Scanner(System.in);
+        
+        try {
+            System.out.println("╔════════════════════════════════════════════╗");
+            System.out.println("║     APLIKASI PENGISIAN KRS - OOP JAVA      ║");
+            System.out.println("╚════════════════════════════════════════════╝\n");
+
+           
+            Mahasiswa mahasiswa = inputDataMahasiswa();
+
+            
+            menuPengisianKRS(mahasiswa);
+
+            
+            menuCetakKRS(mahasiswa);
+
+            System.out.println("Terima kasih telah menggunakan aplikasi KRS. Sampai jumpa!");
+        } finally {
+            scanner.close();
+        }
+    }
+
+    
+    private static Mahasiswa inputDataMahasiswa() {
+        System.out.println("Silakan masukkan data diri Anda:");
+        System.out.println("────────────────────────────────────────────");
+
+        String nim = "";
+        while (nim.isEmpty()) {
+            System.out.print("NIM          : ");
+            nim = scanner.nextLine().trim();
+            if (nim.isEmpty()) {
+                System.out.println("⚠ NIM tidak boleh kosong. Silakan coba lagi.\n");
+            }
+        }
+
+        String nama = "";
+        while (nama.isEmpty()) {
+            System.out.print("Nama         : ");
+            nama = scanner.nextLine().trim();
+            if (nama.isEmpty()) {
+                System.out.println("⚠ Nama tidak boleh kosong. Silakan coba lagi.\n");
+            }
+        }
+
+        System.out.println();
+        return new Mahasiswa(nim, nama);
+    }
+
+   
+    private static void menuPengisianKRS(Mahasiswa mahasiswa) {
+        System.out.println("Pengisian Daftar Mata Kuliah");
+        System.out.println("────────────────────────────────────────────");
+        System.out.println("Anda dapat mengambil maksimal " + Mahasiswa.MAX_SKS + " SKS.\n");
+
+        boolean tambahLagi = true;
+        while (tambahLagi) {
+            System.out.println("Sisa SKS yang dapat diambil: " + mahasiswa.getSisaSks() + " sks");
+            System.out.print("Tambah mata kuliah baru? (y/n): ");
+            String pilihan = scanner.nextLine().trim().toLowerCase();
+
+            if (pilihan.equals("n") || pilihan.equals("no")) {
+                tambahLagi = false;
+                break;
+            } else if (!pilihan.equals("y") && !pilihan.equals("yes")) {
+                System.out.println("⚠ Masukkan y untuk ya atau n untuk tidak.\n");
+                continue;
+            }
+
+            
+            MataKuliah mk = inputMataKuliah(mahasiswa.getSisaSks());
+            if (mk != null) {
+                if (mahasiswa.tambahMk(mk)) {
+                    System.out.println("✓ Mata kuliah berhasil ditambahkan: " + mk.toString() + "\n");
+                    
+                   
+                    if (mahasiswa.getSisaSks() == 0) {
+                        System.out.println("⚠ Anda telah mencapai batas maksimal SKS (" + Mahasiswa.MAX_SKS + " sks).\n");
+                        tambahLagi = false;
+                    }
+                } else {
+                    System.out.println("✗ Gagal menambahkan mata kuliah.");
+                    System.out.println("Sisa SKS Anda hanya " + mahasiswa.getSisaSks() + " sks, tetapi Anda mencoba mengambil " + mk.getSks() + " sks.\n");
+                }
+            } else {
+                System.out.println("✗ Penambahan mata kuliah dibatalkan.\n");
+            }
+        }
+
+        System.out.println("────────────────────────────────────────────\n");
+    }
+
+   
+    private static MataKuliah inputMataKuliah(int sisaSks) {
+        System.out.println("─ Masukkan data mata kuliah:");
+
+        System.out.print("  Kode Mata Kuliah   : ");
+        String kode = scanner.nextLine().trim();
+        if (kode.isEmpty()) {
+            System.out.println("⚠ Kode tidak boleh kosong.");
+            return null;
+        }
+
+        System.out.print("  Nama Mata Kuliah   : ");
+        String nama = scanner.nextLine().trim();
+        if (nama.isEmpty()) {
+            System.out.println("⚠ Nama mata kuliah tidak boleh kosong.");
+            return null;
+        }
+
+        System.out.print("  SKS Mata Kuliah    : ");
+        String sksStr = scanner.nextLine().trim();
+        int sks;
+        try {
+            sks = Integer.parseInt(sksStr);
+            if (sks <= 0) {
+                System.out.println("⚠ SKS harus bernilai positif (> 0).");
+                return null;
+            }
+            if (sks > sisaSks) {
+                System.out.println("⚠ SKS mata kuliah melebihi sisa SKS yang tersedia (" + sisaSks + " sks).");
+                return null;
+            }
+        } catch (NumberFormatException ex) {
+            System.out.println("⚠ Format SKS tidak valid. Masukkan angka.");
+            return null;
+        }
+
+        return new MataKuliah(kode, nama, sks);
+    }
+
+  
+    private static void menuCetakKRS(Mahasiswa mahasiswa) {
+        System.out.print("Apakah Anda ingin mencetak KRS? (y/n): ");
+        String pilihan = scanner.nextLine().trim().toLowerCase();
+
+        if (pilihan.equals("y") || pilihan.equals("yes")) {
+            mahasiswa.printKRS();
+        } else {
+            System.out.println("KRS tidak dicetak.");
+        }
+    }
+}
