@@ -1,0 +1,106 @@
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Kelas Mahasiswa merepresentasikan data mahasiswa
+ * dan daftar mata kuliah yang diambilnya
+ */
+public class Mahasiswa {
+    private final String nim;
+    private final String nama;
+    private final List<MataKuliah> daftarMk;
+    public static final int MAX_SKS = 24;
+
+    /**
+     * Konstruktor Mahasiswa
+     * @param nim NIM mahasiswa
+     * @param nama Nama mahasiswa
+     */
+    public Mahasiswa(String nim, String nama) {
+        this.nim = nim;
+        this.nama = nama;
+        this.daftarMk = new ArrayList<>();
+    }
+
+    public String getNim() {
+        return nim;
+    }
+
+    public String getNama() {
+        return nama;
+    }
+
+    public List<MataKuliah> getDaftarMk() {
+        return new ArrayList<>(daftarMk);
+    }
+
+    /**
+     * Menambah mata kuliah ke daftar KRS
+     * @param mk Mata kuliah yang akan ditambahkan
+     * @return true jika berhasil, false jika melebihi batas SKS
+     */
+    public boolean tambahMk(MataKuliah mk) {
+        if (mk == null) {
+            return false;
+        }
+        int total = getTotalSks();
+        if (total + mk.getSks() > MAX_SKS) {
+            return false;
+        }
+        daftarMk.add(mk);
+        return true;
+    }
+
+    /**
+     * Menghitung total SKS yang sudah diambil
+     * @return Total SKS
+     */
+    public int getTotalSks() {
+        int sum = 0;
+        for (MataKuliah m : daftarMk) {
+            sum += m.getSks();
+        }
+        return sum;
+    }
+
+    /**
+     * Menghitung sisa SKS yang masih dapat diambil
+     * @return Sisa SKS
+     */
+    public int getSisaSks() {
+        return MAX_SKS - getTotalSks();
+    }
+
+    /**
+     * Mencetak KRS ke layar
+     */
+    public void printKRS() {
+        System.out.println("\n╔════════════════════════════════════════════╗");
+        System.out.println("║   KARTU RENCANA STUDI (KRS)                 ║");
+        System.out.println("╚════════════════════════════════════════════╝");
+        System.out.println("NIM              : " + nim);
+        System.out.println("Nama             : " + nama);
+        System.out.println("────────────────────────────────────────────");
+
+        if (daftarMk.isEmpty()) {
+            System.out.println("Belum mengambil mata kuliah.");
+        } else {
+            System.out.println("Daftar Mata Kuliah yang Diambil:");
+            System.out.println("────────────────────────────────────────────");
+            int i = 1;
+            for (MataKuliah m : daftarMk) {
+                System.out.printf("%2d. %s\n", i++, m.toString());
+            }
+            System.out.println("────────────────────────────────────────────");
+            System.out.printf("Total SKS        : %d / %d sks\n", getTotalSks(), MAX_SKS);
+        }
+
+        System.out.println("\n────────────────────────────────────────────");
+        System.out.println("Mengetahui,");
+        System.out.println("Kepala Program Studi");
+        System.out.println();
+        System.out.println("( ttd )");
+        System.out.println(nim + " - " + nama);
+        System.out.println("════════════════════════════════════════════\n");
+    }
+}
