@@ -19,7 +19,6 @@ public class KRSApp {
         public String getNama() { return nama; }
         public int getSks() { return sks; }
 
-        @Override
         public String toString() {
             return String.format("%s - %s (%d sks)", kode, nama, sks);
         }
