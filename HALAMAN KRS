@@ -1,21 +1,12 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Kelas Mahasiswa merepresentasikan data mahasiswa
- * dan daftar mata kuliah yang diambilnya
- */
 public class Mahasiswa {
     private final String nim;
     private final String nama;
     private final List<MataKuliah> daftarMk;
     public static final int MAX_SKS = 24;
 
-    /**
-     * Konstruktor Mahasiswa
-     * @param nim NIM mahasiswa
-     * @param nama Nama mahasiswa
-     */
     public Mahasiswa(String nim, String nama) {
         this.nim = nim;
         this.nama = nama;
@@ -34,11 +25,6 @@ public class Mahasiswa {
         return new ArrayList<>(daftarMk);
     }
 
-    /**
-     * Menambah mata kuliah ke daftar KRS
-     * @param mk Mata kuliah yang akan ditambahkan
-     * @return true jika berhasil, false jika melebihi batas SKS
-     */
     public boolean tambahMk(MataKuliah mk) {
         if (mk == null) {
             return false;
@@ -51,10 +37,6 @@ public class Mahasiswa {
         return true;
     }
 
-    /**
-     * Menghitung total SKS yang sudah diambil
-     * @return Total SKS
-     */
     public int getTotalSks() {
         int sum = 0;
         for (MataKuliah m : daftarMk) {
@@ -63,17 +45,10 @@ public class Mahasiswa {
         return sum;
     }
 
-    /**
-     * Menghitung sisa SKS yang masih dapat diambil
-     * @return Sisa SKS
-     */
     public int getSisaSks() {
         return MAX_SKS - getTotalSks();
     }
 
-    /**
-     * Mencetak KRS ke layar
-     */
     public void printKRS() {
         System.out.println("\n╔════════════════════════════════════════════╗");
         System.out.println("║   KARTU RENCANA STUDI (KRS)                 ║");
